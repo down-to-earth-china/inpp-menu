@@ -79,14 +79,14 @@ public class LoginController {
                 parents.add(menu);
             }
         }
-        Session session1 = SecurityUtils.getSubject().getSession();
+        /*Session session1 = SecurityUtils.getSubject().getSession();
         session1.setAttribute("menus1",parents);
 
         HttpSession session = request.getSession();
-        session.setAttribute("menus",parents);
+        session.setAttribute("menus",parents);*/
 
-        //request.setAttribute("menus", parents);
-        //request.getSession().setAttribute("menus", parents);
+        request.setAttribute("menus", parents);
+        request.getSession().setAttribute("menus", parents);
         return "home";
     }
 

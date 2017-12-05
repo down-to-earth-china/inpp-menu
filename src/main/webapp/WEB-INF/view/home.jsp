@@ -50,7 +50,7 @@
                     </div>
                     <div class="logo-element">华腾</div>
                 </li>
-                <c:forEach var="menu" items="${sessionScope.menus}">
+                <c:forEach var="menu" items="${menus}">
                     <li>
                         <a href="#">
                             <i class="fa fa-edit"></i>
