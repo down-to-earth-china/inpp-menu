@@ -7,9 +7,9 @@
         <!-- 装配 securityManager -->
         <property name="securityManager" ref="securityManager"/>
         <!-- 配置登陆页面 -->
-        <property name="loginUrl" value="/user/index"/>
+        <property name="loginUrl" value="/index"/>
         <!-- 登陆成功后的一面 -->
-        <property name="successUrl" value="/user/home"/>
+        <property name="successUrl" value="/home"/>
         <property name="unauthorizedUrl" value="/unauthor"/>
         <property name="filters">
             <!--自定义过滤规则-->

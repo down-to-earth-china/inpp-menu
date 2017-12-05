@@ -33,12 +33,6 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-    @RequestMapping("/index")
-    public String index(){
-
-        return "index";
-    }
-
     @RequestMapping("/success")
     public String success(){
         return "success";

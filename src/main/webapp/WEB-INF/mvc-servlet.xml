@@ -7,7 +7,7 @@
     <!-- 此注解会自动注册DefaulAunotationHandleMapping和AnnotationMethodHandleerAdapter2个bean，
         是springmvc为@controller分发请求所必须的 -->
     <mvc:annotation-driven enable-matrix-variables="true"/>
-    <mvc:view-controller path="/" view-name="home"/>
+    <mvc:view-controller path="/" view-name="index"/>
 
     <!--试图解析器-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

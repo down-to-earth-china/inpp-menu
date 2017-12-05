@@ -1,3 +1,5 @@
+<%@ page import="org.apache.shiro.SecurityUtils" %>
+<%@ page import="org.apache.shiro.subject.Subject" %>
 <!DOCTYPE html>
 <%@ include file="include/include.jsp" %>
 <%@ page session="false" pageEncoding="UTF-8" isELIgnored="false" %>
@@ -17,7 +19,12 @@
     <link href="${ctx}/resources/img/favicon.ico" rel="icon">
     <link href="${ctx}/resources/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
 </head>
-
+<%
+    Subject subject = SecurityUtils.getSubject();
+    if (subject.isAuthenticated() || subject.isRemembered()){
+        response.sendRedirect("/login");
+    }
+%>
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
 

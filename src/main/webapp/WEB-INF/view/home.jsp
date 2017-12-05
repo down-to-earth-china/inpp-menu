@@ -1,4 +1,5 @@
 <%@ page import="org.apache.shiro.SecurityUtils" %>
+<%@ page import="org.apache.shiro.subject.Subject" %>
 <!DOCTYPE html>
 <%@ include file="./include/include.jsp"%>
 <%@ page session="false" pageEncoding="UTF-8" isELIgnored="false" %>
