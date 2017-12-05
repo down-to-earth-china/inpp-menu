@@ -1,5 +1,6 @@
 package com.huateng.dao;
 
+
 import com.huateng.entity.User;
 
 import java.util.List;
@@ -24,4 +25,5 @@ public interface UserMapper {
 
     void insertList(List<String> list);
 
+    User getUserByName(String name);
 }

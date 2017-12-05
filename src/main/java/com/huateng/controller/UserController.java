@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author shuaion 2017/7/13
@@ -37,10 +38,10 @@ public class UserController {
 
         return "index";
     }
-    @RequestMapping("/home")
-    public String home(){
 
-        return "home";
+    @RequestMapping("/success")
+    public String success(){
+        return "success";
     }
     @RequestMapping("/getuser")
     public String getuser(Model model,HttpServletRequest request){
@@ -88,6 +89,13 @@ public class UserController {
         }
         try {
             file.transferTo(new File("/Users/shuai/"+ new Date().getTime()+".txt"));
+
+            File[] files = new File("/Users/shuai/").listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return false;
+                }
+            });
             //String ss = IOUtils.toString(file.getInputStream(),"UTF-8");
             //System.out.println(ss);
         } catch (IOException e) {

@@ -21,42 +21,7 @@
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
 
-    <div class="tabs-container">
-
-        <div class="panel-body" style="height: 700px;">
-
-            <div class="ibox-content">
-                <div class="row">
-                    <div class="col-sm-6" style="margin-left: 40%;width: 30%">
-                        <h3 class="m-t-none m-b">登录</h3>
-                        <p>欢迎登录本站(⊙o⊙)</p>
-                        <form role="form" action="${ctx}/login" method="post">
-                            <div class="form-group">
-                                <label>用户名</label>
-                                <input type="name" name="name" placeholder="请输入用户名3" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label>密码</label>
-                                <label style="color:red">${error}</label>
-                                <input type="password" name="password" placeholder="请输入密码" class="form-control">
-                            </div>
-                            <div>
-                               <%-- <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>登 录</strong>
-                                </button>--%>
-                                <input type="submit" class="btn btn-sm btn-primary pull-right m-t-n-xs" value="登 录">
-                                <%--<label>
-                                    <input type="checkbox" class="i-checks">自动登录</label>--%>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-</div>
-
+<h3>unauthor</h3>
 </div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

@@ -5,6 +5,8 @@ public class User {
 
     private String name;
 
+    private String password;
+
     private Integer age;
 
     private String address;
@@ -25,18 +27,16 @@ public class User {
         this.name = name == null ? null : name.trim();
     }
 
-    public Integer getAge() {
-        return age;
+    public String getPassword() {
+        return password;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", address='" + address + '\'' +
-                '}';
+    public void setPassword(String password) {
+        this.password = password == null ? null : password.trim();
+    }
+
+    public Integer getAge() {
+        return age;
     }
 
     public void setAge(Integer age) {

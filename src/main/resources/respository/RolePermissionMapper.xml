@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huateng.dao.RolePermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.huateng.entity.RolePermission" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="role_code" property="roleCode" jdbcType="VARCHAR" />
+    <result column="per_code" property="perCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, role_code, per_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from role_permission
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getPermissionByUser" resultType="java.util.Map" parameterType="java.lang.Integer" >
+    select p.* from permission p
+    left join role_permission rp
+    on p.code = rp.per_code
+    left join user_role  ur
+    on rp.role_code = ur.role_code
+    where ur.user_id=#{userId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from role_permission
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huateng.entity.RolePermission" >
+    insert into role_permission (id, role_code, per_code
+      )
+    values (#{id,jdbcType=INTEGER}, #{roleCode,jdbcType=VARCHAR}, #{perCode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huateng.entity.RolePermission" >
+    insert into role_permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="roleCode != null" >
+        role_code,
+      </if>
+      <if test="perCode != null" >
+        per_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roleCode != null" >
+        #{roleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="perCode != null" >
+        #{perCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huateng.entity.RolePermission" >
+    update role_permission
+    <set >
+      <if test="roleCode != null" >
+        role_code = #{roleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="perCode != null" >
+        per_code = #{perCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huateng.entity.RolePermission" >
+    update role_permission
+    set role_code = #{roleCode,jdbcType=VARCHAR},
+      per_code = #{perCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

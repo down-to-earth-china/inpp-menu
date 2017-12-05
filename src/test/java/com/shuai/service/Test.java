@@ -2,6 +2,7 @@ package com.shuai.service;
 
 import com.huateng.entity.User;
 import com.huateng.service.IUserService;
+import org.apache.shiro.codec.Base64;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -43,5 +44,9 @@ public class Test {
         String time = redisUtils.get("time");
         System.out.println("redis缓冲获取值："+time);
         System.out.println(redisUtils.keys("*"));*/
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new String(Base64.decode("1tC/xrDYs8ey+sa3emtiYw==")));
     }
 }

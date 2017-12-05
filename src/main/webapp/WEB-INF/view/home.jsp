@@ -1,3 +1,4 @@
+<%@ page import="org.apache.shiro.SecurityUtils" %>
 <!DOCTYPE html>
 <%@ include file="./include/include.jsp"%>
 <%@ page session="false" pageEncoding="UTF-8" isELIgnored="false" %>
@@ -15,9 +16,14 @@
     <link href="${ctx}/resources/img/favicon.ico" rel="icon">
     <title>华腾平台${ctx}</title>
 </head>
+<%
+    request.getSession().getAttribute("menus");
+    System.out.println("page="+request.getAttribute("menus"));
+    System.out.println("pageContext="+pageContext.getRequest().getAttribute("menus"));
 
+    System.out.println("shiro="+SecurityUtils.getSubject().getSession().getAttribute("menus1"));
+%>
 <body class="fixed-sidebar full-height-layout gray-bg">
-
 <div id="wrapper">
     <!--左侧导航开始-->
     <nav class="navbar-default navbar-static-side" role="navigation">
@@ -44,8 +50,23 @@
                     </div>
                     <div class="logo-element">华腾</div>
                 </li>
-
-                <li>
+                <c:forEach var="menu" items="${sessionScope.menus}">
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-edit"></i>
+                            <span class="nav-label">${menu.name}</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <c:forEach  var="child" items="${menu.childs}">
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a class="J_menuItem" href="${ctx}${child.url}">${child.name}</a>
+                                </li>
+                            </ul>
+                        </c:forEach>
+                    </li>
+                </c:forEach>
+                <%--<li>
                     <a href="#">
                         <i class="fa fa-edit"></i>
                         <span class="nav-label">xxx列表</span>
@@ -56,7 +77,7 @@
                             <a class="J_menuItem" href="${ctx}/user/userList">数据查询</a>
                         </li>
                     </ul>
-                </li>
+                </li>--%>
             </ul>
         </div>
     </nav>

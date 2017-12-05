@@ -2,11 +2,23 @@ package com.huateng.controller;
 
 import com.huateng.entity.User;
 import com.huateng.service.IUserService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 简单登录
@@ -16,25 +28,81 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class LoginController {
 
+    private Logger logger = LoggerFactory.getLogger(LoginController.class);
+
     @Autowired
     private IUserService userService;
 
-    @RequestMapping("login")
-    public String login(HttpServletRequest request, User user){
+    @RequestMapping(value = "login", method = RequestMethod.POST)
+    public String login(HttpServletRequest request, User user) {
 
-       // User user = userService.getUserById();
-        User user1 = new User();
-        user.setName("zhangsan");
-        request.getSession().setAttribute("loginUser",user1);
+        Subject currentUser = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getName(), user.getPassword());
+        try {
+            currentUser.login(token);
+            token.setRememberMe(true);
+        } catch (UnknownAccountException e) {
+            e.printStackTrace();
+            request.setAttribute("error","账号或密码错误");
+            return "forward:/user/index";
+        } catch (IncorrectCredentialsException e) {
+            e.printStackTrace();
+            request.setAttribute("error","账号或密码错误");
+            return "forward:/user/index";
+        } catch (ExcessiveAttemptsException e) {
+            e.printStackTrace();
+            request.setAttribute("error","账号或密码错误");
+            return "forward:/user/index";
+        }catch (LockedAccountException e){
+            e.printStackTrace();
+            request.setAttribute("error","账号被锁定");
+            return "forward:/user/index";
+        }catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error","登录异常");
+            return "forward:/user/index";
+        }
+        //currentUser.getPrincipals();
+        //登录成功之后 获取菜单
+        List<Map<String, Object>> menus = userService.getMenuByUser(user.getName());
+        List<Map<String, Object>> parents = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> childs = null;
+        for (Map<String, Object> menu : menus) {
+            if ("0".equals(menu.get("parent_id"))) {
+                childs = new ArrayList<Map<String, Object>>();
+                for (int i = 0; i < menus.size(); i++) {
+                    if (menu.get("id").toString().equals(menus.get(i).get("parent_id"))) {
+                        childs.add(menus.get(i));
+                    }
+                }
+                menu.put("childs", childs);
+                parents.add(menu);
+            }
+        }
+        Session session1 = SecurityUtils.getSubject().getSession();
+        session1.setAttribute("menus1",parents);
 
-        return "forward:/user/home";
+        HttpSession session = request.getSession();
+        session.setAttribute("menus",parents);
+
+        //request.setAttribute("menus", parents);
+        //request.getSession().setAttribute("menus", parents);
+        return "home";
     }
 
     @RequestMapping("logout")
-    public String logout(HttpServletRequest request, User user){
+    public String logout(HttpServletRequest request, User user) {
 
-        request.getSession().removeAttribute("loginUser");
+        SecurityUtils.getSubject().logout();
 
-        return "redirect:/index";
+        return "redirect:/user/index";
+    }
+
+    @RequestMapping("/unauthor")
+    public String unauthor(HttpServletRequest request, User user) {
+
+        SecurityUtils.getSubject().logout();
+
+        return "redirect:/unauthor";
     }
 }

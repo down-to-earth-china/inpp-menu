@@ -1,6 +1,7 @@
 package com.huateng.service.impl;
 
 import com.huateng.bean.PageInfo;
+import com.huateng.dao.MenuMapper;
 import com.huateng.dao.UserMapper;
 import com.huateng.entity.User;
 import com.huateng.excels.ExcelTemplate;
@@ -24,6 +25,8 @@ import java.util.Map;
 public class UserServiceImpl implements IUserService{
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private MenuMapper menuMapper;
     @Override
     public void insertUser(User user) {
         userMapper.insert(user);
@@ -89,6 +92,11 @@ public class UserServiceImpl implements IUserService{
         list.add("insert into user(name,age,address)values(\"奥巴马\",12,\"bj\");");
         list.add("insert into user(name,age,address)values(\"特朗普\", 10, \"北京市朝阳区\");");
         userMapper.insertList(list);
+    }
+
+    @Override
+    public List<Map<String, Object>> getMenuByUser(String userName) {
+        return menuMapper.getMenuByUser(userName);
     }
 
 }

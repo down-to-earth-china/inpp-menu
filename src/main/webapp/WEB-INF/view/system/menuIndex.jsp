@@ -32,14 +32,8 @@
                 <div class="ibox-content clearfix">
                     <form role="form" class="form-inline" action="${ctx}/user/export" id="queryForm">
                         <shiro:hasRole name="001">
-                            <button type="button" class="btn btn-primary" id="expor-tbutton">导出文件</button>
+                            <button type="button" class="btn btn-primary" id="add-btn">新增菜单</button>
                         </shiro:hasRole>
-                        <shiro:hasPermission name="/user/upload">
-                            <div class="form-group">
-                                <label class="btn btn-info pull-right" for="_upload_box">上传附件</label>
-                                <input type="file" id="_upload_box" name="file" class="hide">
-                            </div>
-                        </shiro:hasPermission>
                     </form>
                 </div>
             </div>
@@ -56,12 +50,6 @@
                         </div>
                     </div>
 
-                    <%--<div class="ibox-content">
-                        <label class="font-noraml" style="width: 15%;">合计</label>
-                        笔数: <label class="font-noraml count-label" style="width: 15%;"> </label>
-                        放款金额:<label class="amt-label" style="width: 15%;"></label>
-                    </div>--%>
-
                 </div>
             </div>
 
@@ -70,6 +58,63 @@
 </div>
 </div>
 
+
+<%--弹窗--%>
+<div id="menu-modal-form" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog" style="width: 600px;">
+        <%--<div class="modal-body">--%>
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>添加菜单</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal m-t" id="logForm" action="${ctx}/system/addMenu" accept-charset="UTF-8">
+                            <div class="form-group">
+                                <label for="menuname" class="col-sm-2 control-label">菜单名称:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="menuname" name="name"
+                                           placeholder="请输入名字">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="url" class="col-sm-2 control-label">菜单路径:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="url" name="url"
+                                           placeholder="请输入名字">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="parentId" class="col-sm-2 control-label">父菜单:</label>
+                                <div class="col-sm-2">
+                                    <select type="text" class="form-control" name="parentId" id="parentId"
+                                            data-bind-dict="BUS_STATUS_CD" style="width: 400px">
+                                        <option value="0">请选择</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="status" class="col-sm-2 control-label">菜单状态:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="status" name="status"
+                                           placeholder="请输入名字">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default"
+                                        data-dismiss="modal">关闭
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    提交更改
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+<%--end弹窗--%>
 </div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -94,6 +139,7 @@
 <script src="${ctx}/resources/js/plugins/layer/layer.min.js"></script>
 <!-- Page-Level Scripts -->
 <script>
+
     upload();
     //修改
     function operatorLoanRecord(obj) {
@@ -121,7 +167,7 @@
             beforeRequest: function () {
                 jQuery("#loanRecords_table_1").jqGrid("clearGridData");
             },	//请求前的函数
-            url: '${ctx}/user/getLoanRecords',
+            url: '${ctx}/system/getMenus',
             postData: {
                 "flag": 0
             },
@@ -130,12 +176,23 @@
             width: 'auto',
             shrinkToFit: false,//设置了此配置，将会参考每列配置的列宽，对列宽进行重新计算
             mtype: 'post',
-            colNames: ['id', '姓名', '年龄', '地址'],
+            colNames: ['id', '菜单名称', '路径', '状态'],
             colModel: [
                 {name: 'id', index: 'id', align: 'center', width: '200'},
                 {name: 'name', index: 'name', width: '200', align: 'center'},
-                {name: 'age', index: 'age', width: '200', align: 'center'},
-                {name: 'address', index: 'address', width: '200', align: 'center'}
+                {name: 'url', index: 'url', width: '200', align: 'center'},
+                {
+                    name: 'status', index: 'status', width: '200', align: 'center',
+                    formatter: function typeformatter(cellValue, options, rowObject) {
+                        if (rowObject.payStatus == 0) {
+                            return "禁用";
+                        } else if (rowObject.payStatus == 1) {
+                            return "可用";
+                        } else {
+                            return "未知";
+                        }
+                    }
+                }
             ],
             jsonReader: {
                 root: "viewJsonData", //json中的viewJsonData，对应Page中的 viewJsonData。
@@ -154,6 +211,8 @@
             viewrecords: false,
             rownumbers: true,
             onSelectRow: function (rowid) {
+               /* parentMenu();
+                $("#menu-modal-form").modal();*/
                 //alert(rowid);
             },
             loadComplete: function (data) {
@@ -167,6 +226,29 @@
     $("#expor-tbutton").click(function () {
         $("#queryForm").submit();
     });
+    function parentMenu(){
+        $.ajax({
+            url:"${ctx}/system/pMenus",
+            type:"get",
+            data:"json",
+            success:function(data){
+                if(data){
+                    $.each(data,function(k,v){
+                        $("#parentId").append("<option value='"+v.id+"'>"+v.name+"</option>");
+                    });
+                }
+            },
+            error:function(){
+                swal("异常");
+            }
+        });
+    }
+
+    $("#add-btn").click(function(){
+        parentMenu();
+        $("#menu-modal-form").modal();
+    });
+    
     function upload() {
         $('#_upload_box').ajaxfileupload({
             action: '${ctx}/user/upload',
@@ -174,27 +256,27 @@
             validate_extensions: false,
             //params: {contractId: contractId, flag: 3, appId: 0},//post contractId to server
             onStart: function () {
-                 loadingId = layer.load();
+                loadingId = layer.load();
             },
             onComplete: function (result) {
-                 layer.close(loadingId);
-                if (result=="success") {
+                layer.close(loadingId);
+                if (result == "success") {
                     swal({
-                        title:"上传成功",
-                        text:"",
-                        type:"success"
+                        title: "上传成功",
+                        text: "",
+                        type: "success"
                     });
-                } else if(result=="typeerror"){
+                } else if (result == "typeerror") {
                     swal({
-                        title:"上传文件类型错误",
-                        text:"",
-                        type:"error"
+                        title: "上传文件类型错误",
+                        text: "",
+                        type: "error"
                     });
-                }else {
+                } else {
                     swal({
-                        title:"上传文件异常",
-                        text:"",
-                        type:"error"
+                        title: "上传文件异常",
+                        text: "",
+                        type: "error"
                     });
                 }
             }
