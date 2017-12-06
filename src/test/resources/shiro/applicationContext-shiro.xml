@@ -45,7 +45,7 @@
     <!-- 配置缓存管理器 -->
     <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
         <!-- 指定 ehcache 的配置文件 -->
-        <property name="cacheManagerConfigFile" value="/ehcache.xml"/>
+        <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>
     </bean>
 
     <bean id="shiroDbRealm" class="com.huateng.shiro.ShiroDbRelam"/>

@@ -19,8 +19,6 @@ public class Test {
 
     @Autowired
     private IUserService userService;
-    @Autowired
-   // private RedisUtils redisUtils;
 
     //@org.junit.Test
     public void getusers(){
@@ -45,8 +43,12 @@ public class Test {
         System.out.println("redis缓冲获取值："+time);
         System.out.println(redisUtils.keys("*"));*/
     }
+    @org.junit.Test
+    public void cacheTest(){
+
+    }
 
     public static void main(String[] args) {
-        System.out.println(new String(Base64.decode("1tC/xrDYs8ey+sa3emtiYw==")));
+        System.out.println(String.valueOf(Base64.decode("1tC/xrDYs8ey+sa3emtiYw==")));
     }
 }

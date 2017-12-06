@@ -38,13 +38,11 @@
            timeToLiveSeconds="3600"
            overflowToDisk="true"
            diskPersistent="true"
-           statistics="true"
-           
-           >
+           statistics="true">
           
     </cache>
     
-    <cache name="sys-booklet-cache"
+    <cache name="user-cache"
            maxEntriesLocalHeap="2000"
            eternal="false"
            timeToIdleSeconds="3600"

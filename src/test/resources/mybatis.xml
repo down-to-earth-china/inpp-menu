@@ -17,13 +17,13 @@
                         userId="root"
                         password="123456"/>
 
-        <javaModelGenerator targetPackage="com.shuai.entity"
+        <javaModelGenerator targetPackage="com.huateng.entity"
                             targetProject="src/main/java-gen">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="com.shuai.xml"
+        <sqlMapGenerator targetPackage="com.huateng.xml"
                          targetProject="src/main/java-gen">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
@@ -34,7 +34,7 @@
         </javaClientGenerator>
 
 
-        <table tableName="user" domainObjectName="User"
+        <table tableName="menu" domainObjectName="Menu"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

@@ -7,6 +7,7 @@
     <!-- 此注解会自动注册DefaulAunotationHandleMapping和AnnotationMethodHandleerAdapter2个bean，
         是springmvc为@controller分发请求所必须的 -->
     <mvc:annotation-driven enable-matrix-variables="true"/>
+    <mvc:view-controller path="/" view-name="index"/>
 
     <!--试图解析器-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -24,7 +25,12 @@
        key为mapping的URI pattern值,而value为ResourceHttpRequestHandler,
        这样就巧妙的把对静态资源的访问由HandlerMapping转到ResourceHttpRequestHandler处理并返回,
        所以就支持classpath目录,jar包内静态资源的访问-->
-    <mvc:resources mapping="/resources/**" location="resources/" />
-
+    <mvc:resources mapping="/resources/**" location="/resources/" />
+    <!-- 需要文件上传功能时，启用以下配置 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxInMemorySize">
+            <value>1638400</value>
+        </property>
+    </bean>
 
 </beans>

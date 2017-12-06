@@ -1,15 +1,12 @@
 package com.huateng.controller;
 
 import com.huateng.bean.PageInfo;
-import com.huateng.entity.User;
 import com.huateng.service.IUserService;
 import com.huateng.utils.JsonUtil;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,9 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author shuaion 2017/7/13
@@ -37,15 +36,6 @@ public class UserController {
     public String success(){
         return "success";
     }
-    @RequestMapping("/getuser")
-    public String getuser(Model model,HttpServletRequest request){
-        User user = new User();
-        user.setName("张三");
-        user.setAge(12);
-        user.setAddress("中国长春");
-        userService.insertUser(user);
-        return "index";
-    }
     @RequestMapping("/export")
     @ResponseBody
     public String export(HttpServletResponse response, HttpServletRequest request){
@@ -61,6 +51,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/getLoanRecords",method = RequestMethod.POST)
     public String getDatas(int rows, int page){
+
         logger.info("数据查询");
         PageInfo pageContent = new PageInfo ();
         pageContent.setPageSizes (rows);
@@ -95,12 +86,6 @@ public class UserController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "success";
-    }
-    @ResponseBody
-    @RequestMapping("/inserts")
-    public Object insetList(){
-        userService.insertList();
         return "success";
     }
 }
