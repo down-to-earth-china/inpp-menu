@@ -9,6 +9,7 @@ import com.huateng.excels.UserDataExcel;
 import com.huateng.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -86,17 +87,24 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public void insertList() {
-        Map<String,Object> map = new HashMap<String, Object>();
-        List<String> list = new ArrayList<String>();
-        list.add("insert into user(name,age,address)values(\"奥巴马\",12,\"bj\");");
-        list.add("insert into user(name,age,address)values(\"特朗普\", 10, \"北京市朝阳区\");");
-        userMapper.insertList(list);
+    public List<Map<String, Object>> getMenuByUser(String userName) {
+        return menuMapper.getMenuByUser(userName);
     }
 
     @Override
-    public List<Map<String, Object>> getMenuByUser(String userName) {
-        return menuMapper.getMenuByUser(userName);
+    public int saveUm(String menuIds,int userId) {
+        userMapper.deleteUserMenu(userId);
+        List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
+        String[] menuId = menuIds.split(",");
+        for (String mId:menuId){
+            Map<String,Object> map = new HashMap<String, Object>();
+            if(!StringUtils.isEmpty(mId)){
+                map.put("menuId",mId);
+                map.put("userId",userId);
+                list.add(map);
+            }
+        }
+        return userMapper.insertUms(list);
     }
 
 }

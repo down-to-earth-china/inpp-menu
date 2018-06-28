@@ -1,12 +1,15 @@
 package com.huateng.controller;
 
 import com.huateng.bean.PageInfo;
+import com.huateng.dao.UserMapper;
+import com.huateng.entity.User;
 import com.huateng.service.IUserService;
 import com.huateng.utils.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +23,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author shuaion 2017/7/13
@@ -31,6 +35,8 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+    @Autowired
+    private UserMapper userMapper;
 
     @RequestMapping("/success")
     public String success(){
@@ -45,7 +51,7 @@ public class UserController {
     }
     @RequestMapping("/userList")
     public String userList(){
-        return "loan/loan_records";
+        return "system/userlist";
     }
 
     @ResponseBody
@@ -87,5 +93,30 @@ public class UserController {
             e.printStackTrace();
         }
         return "success";
+    }
+    @RequestMapping("/userMenu")
+    public String userMenu(Model model, int userId){
+        User user = userService.getUserById(userId);
+        List<Integer> menuIds = userMapper.getUserMenus(userId);
+        model.addAttribute("user",user);
+        model.addAttribute("menuIds",menuIds);
+        return "system/userMenu";
+    }
+
+    @ResponseBody
+    @RequestMapping("/saveUm")
+    public Object saveUm(String menuIds,int userId){
+        return userService.saveUm(menuIds,userId);
+    }
+
+
+    public static void main(String[] args) {
+        float x = 10.02f;
+        System.out.println("x*x="+x*x);
+
+        int a = 3;
+        System.out.println("a<<3="+(a<<3));
+
+
     }
 }

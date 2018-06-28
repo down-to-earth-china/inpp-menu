@@ -28,13 +28,13 @@
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator targetPackage="com.shuai.repository"
+        <javaClientGenerator targetPackage="com.huateng.dao"
                              targetProject="src/main/java-gen" type="XMLMAPPER">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
 
-        <table tableName="menu" domainObjectName="Menu"
+        <table tableName="user_menu" domainObjectName="UserMenu"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

@@ -141,21 +141,6 @@
 <script>
 
     upload();
-    //修改
-    function operatorLoanRecord(obj) {
-        if ($(obj).hasClass("updateLink")) {
-            //记录id
-            $("#id").val($(obj).attr("recordId"));
-            $("#payamtsuccess").val($(obj).attr("payamtsuccess"));
-            $("#payamt").val($(obj).attr("payamt"));
-            $("#conId").val($(obj).attr("contractid"));
-            $("#paySuccessAmt,#remark").val("");
-            $(".error").empty().removeClass("error");
-        } else if ($(obj).hasClass("logLink")) {
-            getLogs($(obj).attr("recordId"));
-        }
-        //$("#payDate").val(new Date().toLocaleDateString());
-    }
 
     $(document).ready(function () {
 
@@ -211,9 +196,8 @@
             viewrecords: false,
             rownumbers: true,
             onSelectRow: function (rowid) {
-               /* parentMenu();
-                $("#menu-modal-form").modal();*/
-                //alert(rowid);
+                alert(rowid);
+                //openUserMenu();
             },
             loadComplete: function (data) {
 
@@ -281,6 +265,21 @@
                 }
             }
         });
+    }
+
+    function openUserMenu(){
+        window.parent.ParentMenuItem({
+            attr: function () {
+                return "${ctx}/system/userMenu/";
+            },
+            text: function () {
+                return "用户菜单";
+            },
+            data: function () {
+                return new Date().getTime();
+            }
+        });
+        return false;
     }
 
 </script>

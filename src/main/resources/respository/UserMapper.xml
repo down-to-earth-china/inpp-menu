@@ -34,6 +34,22 @@
     from user
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="getUserMenus" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+    select menu_id from user_menu
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <insert id="insertUms">
+    insert into user_menu(menu_id,user_id)
+    VALUES
+    <foreach collection="list" item="l" index="index" separator=",">
+      (
+        #{l.menuId},#{l.userId}
+      )
+    </foreach>
+  </insert>
+  <delete id="deleteUserMenu" parameterType="int">
+    delete from user_menu where user_id = #{userId}
+  </delete>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from user
     where id = #{id,jdbcType=INTEGER}

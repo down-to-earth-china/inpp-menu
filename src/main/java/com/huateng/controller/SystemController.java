@@ -54,5 +54,10 @@ public class SystemController {
         return JsonUtil.toJSONString (pageContent);
     }
 
+    @RequestMapping("userMenu")
+    public String userMenu(){
+
+        return "system/userMenu";
+    }
 
 }

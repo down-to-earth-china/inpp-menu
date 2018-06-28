@@ -26,4 +26,10 @@ public interface UserMapper {
     void insertList(List<String> list);
 
     User getUserByName(String name);
+
+    List<Integer> getUserMenus(int userId);
+
+    int insertUms(List<Map<String,Object>> list);
+
+    void deleteUserMenu(int userId);
 }

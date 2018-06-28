@@ -13,6 +13,6 @@ public interface IUserService{
     User getUserById(int id);
     void exoprt(HttpServletRequest request, HttpServletResponse response);
     PageInfo getLoanRecords (PageInfo page) throws Exception;
-    void insertList();
     List<Map<String,Object>> getMenuByUser(String userName);
+    int saveUm(String menuIds,int userId);
 }
