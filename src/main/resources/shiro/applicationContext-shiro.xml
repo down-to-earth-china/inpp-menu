@@ -43,10 +43,10 @@
     </bean>
 
     <!-- 配置缓存管理器 -->
-    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-        <!-- 指定 ehcache 的配置文件 -->
+    <!--<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        &lt;!&ndash; 指定 ehcache 的配置文件 &ndash;&gt;
         <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>
-    </bean>
+    </bean>-->
 
     <bean id="shiroDbRealm" class="com.huateng.shiro.ShiroDbRelam"/>
 
@@ -60,7 +60,7 @@
         <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
     </bean>
     <!-- 会话管理器 默认方式-->
-    <!--用于 Web 环境的实现，自己维护着会话，直接废弃了 Servlet 容器的会话管理-->
+    <!--用于 Web 环境的实现，自己维护着会话，直接废弃了 Servlet 容器的会话管理
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
         <property name="globalSessionTimeout" value="1800000"/>
         <property name="deleteInvalidSessions" value="true"/>
@@ -69,7 +69,34 @@
         <property name="sessionDAO" ref="sessionDAO"/>
         <property name="sessionIdCookieEnabled" value="true"/>
         <property name="sessionIdCookie" ref="sessionIdCookie"/>
+    </bean> -->
+
+
+    <bean id="cacheManager" class="com.huateng.redis.RedisCacheManager"/>
+
+    <!--redis管理session-->
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="sessionDAO" ref="redisSessionDao"/>
+        <property name="deleteInvalidSessions" value="true"/>
+        <property name="globalSessionTimeout" value="${shiro.session.timeout}"/>
+        <property name="sessionIdCookie" ref="sharesession"/>
+        <!-- 定时检查失效的session -->
+        <property name="sessionValidationSchedulerEnabled" value="true"/>
+        <property name="cacheManager" ref="cacheManager"/>
     </bean>
+
+    <!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
+    <bean id="sharesession" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <!-- cookie的name,对应的默认是 JSESSIONID -->
+        <constructor-arg name="name" value="SHAREJSESSIONID"/>
+        <!-- jsessionId的path为 / 用于多个系统共享jsessionId -->
+        <property name="path" value="/"/>
+    </bean>
+
+    <bean id="redisSessionDao" class="com.huateng.redis.RedisSessionDao">
+        <property name="expire" value="${shiro.session.timeout}"/>
+    </bean>
+
 
     <!-- 会话验证调度器 -->
     <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
@@ -103,8 +130,12 @@
         <property name="realm" ref="shiroDbRealm" />
         <property name="cacheManager" ref="cacheManager" />
         <property name="rememberMeManager" ref="rememberMeManager" />
+       <!-- <property name="sessionManager" ref="sessionManager"/>-->
+
+        <!--将session托管给redis进行管理，便于搭建集群系统-->
         <property name="sessionManager" ref="sessionManager"/>
     </bean>
+
     <!--密码校验需要实现 也可自己实现 此bean不需要配置 因为在AuthenticatingRealm构造函数中new SimpleCredentialsMatcher()
         这个类作用是将前天获取的密码和查询后台的密码进行比对校验
         将前台密码和后台密码传给此类构造函数,是在AuthorizingRealm类的方法中
