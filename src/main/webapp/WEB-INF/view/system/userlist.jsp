@@ -40,6 +40,11 @@
                                 <input type="file" id="_upload_box" name="file" class="hide">
                             </div>
                         </shiro:hasPermission>
+                        <shiro:hasRole name="001">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" id="add-btn">新增用户</button>
+                            </div>
+                        </shiro:hasRole>
                     </form>
                 </div>
             </div>
@@ -72,8 +77,67 @@
 
 </div>
 
+<%--弹窗--%>
+<div id="menu-modal-form" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog" style="width: 600px;">
+        <%--<div class="modal-body">--%>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>添加用户</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="userForm" action="${ctx}/user/addUser" accept-charset="UTF-8">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label">姓名:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="name" name="name"
+                                       placeholder="请输入名字">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="age" class="col-sm-2 control-label">年龄:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="age" name="age"
+                                       placeholder="请输入年龄">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2 control-label">地址:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="address" name="address"
+                                       placeholder="请输入地址">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="status" class="col-sm-2 control-label">状态:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="status" name="status"
+                                        placeholder="请输入名字">
+                                    <option>禁用</option>
+                                    <option>启用</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">关闭
+                            </button>
+                            <button type="button" id="add-user-btn" class="btn btn-primary">
+                                提交
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%--end弹窗--%>
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="${ctx}/resources/js/jquery-2.1.1.min.js"></script>
+<script src="${ctx}/resources/js/plugins/form/jquery.form.js"></script>
 <script src="${ctx}/resources/js/plugins/ajaxfileupload/jquery.ajaxfileupload.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="${ctx}/resources/js/bootstrap.min.js?v=3.4.0"></script>
@@ -216,7 +280,34 @@
         });
         return false;
     }
+    //新增用户
+    $("#add-btn").click(function(){
+        //parentMenu();
+        $("#menu-modal-form").modal();
+    });
+    $("#add-user-btn").click(function(){
+        $("#userForm").ajaxSubmit({
+            type:"post",
+            url:"${ctx}/user/addUser",
+            data:$(this).serialize(),
+            success:function(){
+                swal({
+                    title:"添加成功",
+                    text:"",
+                    type:"success"
+                },function(){
+                    $(this).resetForm(); // 提交后重置表单
+                    $('#menu-modal-form').modal('hide')
+                });
+                reload();
+            }
+        });
+    });
+    function reload(){
+        $("#loanRecords_table_1").trigger("reloadGrid");
+    }
 
 </script>
+
 </body>
 </html>

@@ -1,11 +1,11 @@
-package com.shuai.entity;
+package com.huateng.entity;
 
 public class User {
     private Integer id;
 
     private String name;
 
-    private String password;
+    private String passWord;
 
     private Integer age;
 
@@ -27,12 +27,12 @@ public class User {
         this.name = name == null ? null : name.trim();
     }
 
-    public String getPassword() {
-        return password;
+    public String getPassWord() {
+        return passWord;
     }
 
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+    public void setPassWord(String passWord) {
+        this.passWord = passWord == null ? null : passWord.trim();
     }
 
     public Integer getAge() {

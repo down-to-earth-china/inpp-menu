@@ -33,6 +33,7 @@
                     <form role="form" class="form-inline" action="${ctx}/user/export" id="queryForm">
                         <shiro:hasRole name="001">
                             <button type="button" class="btn btn-primary" id="add-btn">保存</button>
+                            <button type="button" class="btn btn-primary" id="del-btn">删除</button>
                         </shiro:hasRole>
                     </form>
                 </div>
@@ -212,13 +213,21 @@
             viewrecords: false,
             //rownumbers: true,
             multiselect: true,//复选框
-            onSelectRow: function (rowid) {
+            /*beforeSelectRow: function(rowid, status, e)
+            {
+                $("#pager_list_1").jqGrid('resetSelection');
+                return(true);
+            },*/
+            onSelectRow: function (rowid, status, e) {
                 //var rowIds = jQuery("#loanRecords_table_1").jqGrid('getGridParam', 'selarrrow');
                 var rowData = $("#loanRecords_table_1").jqGrid("getRowData");
                 var parent_id=rowData[rowid-1].parent_id;
-                if(parent_id!='0'){
-                    //alert($("#loanRecords_table_1 tr[id=" + parent_id*1 + "] input:checkbox").attr("checked"));
-                    $("#loanRecords_table_1 tr[id=" + parent_id*1 + "] input:checkbox").trigger("click");
+                var rowId = parseInt(rowid);
+                var parentId = parseInt(parent_id);
+                if(parentId*1>0){
+                    //alert($("#loanRecords_table_1 tr[id=" + rowId*1 + "] input:checkbox").attr("checked"));
+
+                    //$("#loanRecords_table_1 tr[id=" + rowId*1 + "] input:checkbox").trigger("click");
                     //$("#loanRecords_table_1 tr[id=" + parent_id*1 + "] input:checkbox").attr("checked",true);
                 }
 
@@ -229,7 +238,8 @@
                 for (var i = 0; rowData.length && rowData[i]; i++) {
                     for (var j = 0; sMenuId.length && sMenuId[j]; j++) {
                         if (rowData[i].id == sMenuId[j]) {
-                            $("#loanRecords_table_1 tr[id=" + (i + 1) + "] input:checkbox").attr("checked", true);
+                            //$("#loanRecords_table_1 tr[id=" + (i + 1) + "] input:checkbox").attr("checked", "checked");
+                            $("#loanRecords_table_1 tr[id=" + (i + 1) + "] input:checkbox").trigger("click");
                             continue;
                         }
                     }
@@ -300,6 +310,46 @@
             },
         });
 
+    });
+
+    //删除
+    $("#del-btn").click(function () {
+        var userId = ${user.id};
+       var a = $(".active.J_menuTab").attr("data-id");
+alert(a);
+        /*$.ajax({
+            url: "${ctx}/user/delUser",
+            data: {userId: userId},
+            type: "GET",
+            async:false,
+            dataType: "json",//注意如果controller返回是简单的字符串 就会抛出异常 因为简单的字符串如"success"等 不是标准的json格式
+            success: function (data) {
+                var target = $('.J_iframe[data-id="' + $(this).data('id') + '"]');
+                var url = target.attr('src');
+                alert(target+"--"+url);
+
+                if(data && data.flag == "SUCCESS"){
+                    swal({
+                                title: "删除成功",
+                                text: "",
+                                type: "success"
+                            }, function () {
+                                parent.closeCurrentPage();
+
+                            }
+                    );
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown);
+                var i = 0;
+                swal({
+                    title: "删除用户异常"+ errorThrown,
+                    text: "",
+                    type: "error"
+                });
+            }
+        })*/
     });
 
     function upload() {

@@ -11,12 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -36,11 +34,18 @@ public class LoginController {
     @RequestMapping(value = "login"/*, method = RequestMethod.POST*/)
     public String login(HttpServletRequest request, User user) {
 
+        HttpSession session = request.getSession();
+
+        session.setAttribute("sessType","come from HttpSession");
+
+        Session shiroSession = SecurityUtils.getSubject().getSession();
+
         Subject currentUser = SecurityUtils.getSubject();
 
         if (!currentUser.isAuthenticated() && !currentUser.isRemembered()){
 
             UsernamePasswordToken token = new UsernamePasswordToken(user.getName(), user.getPassword());
+
             try {
                 currentUser.login(token);
                 token.setRememberMe(true);

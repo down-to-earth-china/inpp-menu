@@ -7,8 +7,10 @@ import com.huateng.entity.User;
 import com.huateng.excels.ExcelTemplate;
 import com.huateng.excels.UserDataExcel;
 import com.huateng.service.IUserService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -88,6 +90,12 @@ public class UserServiceImpl implements IUserService{
 
     @Override
     public List<Map<String, Object>> getMenuByUser(String userName) {
+
+        Object type = SecurityUtils.getSubject().getSession().getAttribute("sessType");
+
+        System.out.println("-------session-type--------"+type);
+
+
         return menuMapper.getMenuByUser(userName);
     }
 
@@ -105,6 +113,13 @@ public class UserServiceImpl implements IUserService{
             }
         }
         return userMapper.insertUms(list);
+    }
+
+    @Override
+    @Transactional
+    public void delUser(int userId) {
+        userMapper.deleteUserMenu(userId);
+        userMapper.deleteUser(userId);
     }
 
 }

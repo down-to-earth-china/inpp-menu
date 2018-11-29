@@ -42,9 +42,24 @@
     from menu WHERE parent_id = 0
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from menu
-    where id = #{id,jdbcType=INTEGER}
+  delete from menu
+  where id = #{id,jdbcType=INTEGER}
+</delete>
+
+  <delete id="delmenu" parameterType="java.util.List">
+    delete from menu where id IN
+    <foreach collection="ids" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
   </delete>
+
+  <delete id="delUserMenu" parameterType="java.util.List">
+    delete from user_menu where menu_id IN
+    <foreach collection="ids" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </delete>
+
   <insert id="insert" parameterType="com.huateng.entity.Menu" >
     insert into menu (id, name, url, 
       status, parent_id)

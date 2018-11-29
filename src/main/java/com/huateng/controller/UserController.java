@@ -1,9 +1,11 @@
 package com.huateng.controller;
 
 import com.huateng.bean.PageInfo;
+import com.huateng.controller.status.ResponseStatus;
 import com.huateng.dao.UserMapper;
 import com.huateng.entity.User;
 import com.huateng.service.IUserService;
+import com.huateng.smtp.SmtpClient;
 import com.huateng.utils.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,13 +112,31 @@ public class UserController {
     }
 
 
+    @RequestMapping("/delUser")
+    @ResponseBody
+    public Object delUser(int userId){
+        userService.delUser(userId);
+        SmtpClient client = new SmtpClient();
+        client.setSubject("send email to 乔帅");
+        client.syncSendMessage("恭喜恭喜");
+        return new ResponseStatus(ResponseStatus.FLAG.SUCCESS);
+    }
+    @RequestMapping("addUser")
+    @ResponseBody
+    public Object addUser(User user){
+        userService.insertUser(user);
+        return new ResponseStatus(ResponseStatus.FLAG.SUCCESS);
+    }
+
     public static void main(String[] args) {
         float x = 10.02f;
         System.out.println("x*x="+x*x);
 
         int a = 3;
         System.out.println("a<<3="+(a<<3));
+        System.out.println("a>>3="+(a>>3));
 
+        System.out.println("1<<30 = "+(1<<30));
 
     }
 }

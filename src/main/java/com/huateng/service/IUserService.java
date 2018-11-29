@@ -15,4 +15,5 @@ public interface IUserService{
     PageInfo getLoanRecords (PageInfo page) throws Exception;
     List<Map<String,Object>> getMenuByUser(String userName);
     int saveUm(String menuIds,int userId);
+    void delUser(int userId);
 }

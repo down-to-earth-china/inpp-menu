@@ -2,6 +2,7 @@ package com.shuai.service;
 
 import com.huateng.entity.User;
 import com.huateng.service.IUserService;
+import com.huateng.smtp.SmtpClient;
 import org.apache.shiro.codec.Base64;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,13 @@ public class Test {
     @org.junit.Test
     public void cacheTest(){
 
+    }
+    @org.junit.Test
+    public void emailTest(){
+
+        SmtpClient client = new SmtpClient();
+        client.setSubject("send email to 乔帅");
+        client.syncSendMessage("恭喜恭喜");
     }
 
     public static void main(String[] args) {

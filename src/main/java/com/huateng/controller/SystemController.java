@@ -1,6 +1,7 @@
 package com.huateng.controller;
 
 import com.huateng.bean.PageInfo;
+import com.huateng.controller.status.ResponseStatus;
 import com.huateng.entity.Menu;
 import com.huateng.service.IMenuService;
 import com.huateng.utils.JsonUtil;
@@ -56,8 +57,13 @@ public class SystemController {
 
     @RequestMapping("userMenu")
     public String userMenu(){
-
         return "system/userMenu";
+    }
+
+    @ResponseBody
+    @RequestMapping("delMenu")
+    public Object delMenu(String menuId){
+        return menuService.delMenu(menuId);
     }
 
 }

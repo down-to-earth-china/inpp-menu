@@ -60,6 +60,7 @@
         <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
     </bean>
     <!-- 会话管理器 默认方式-->
+    <!--用于 Web 环境的实现，自己维护着会话，直接废弃了 Servlet 容器的会话管理-->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
         <property name="globalSessionTimeout" value="1800000"/>
         <property name="deleteInvalidSessions" value="true"/>
@@ -72,7 +73,7 @@
 
     <!-- 会话验证调度器 -->
     <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
-        <property name="sessionValidationInterval" value="1800000"/>
+        <property name="sessionValidationInterval" value="180000"/>
         <property name="sessionManager" ref="sessionManager"/>
     </bean>
 
@@ -104,9 +105,11 @@
         <property name="rememberMeManager" ref="rememberMeManager" />
         <property name="sessionManager" ref="sessionManager"/>
     </bean>
-    <!--密码校验需要实现 也可自己实现-->
+    <!--密码校验需要实现 也可自己实现 此bean不需要配置 因为在AuthenticatingRealm构造函数中new SimpleCredentialsMatcher()
+        这个类作用是将前天获取的密码和查询后台的密码进行比对校验
+        将前台密码和后台密码传给此类构造函数,是在AuthorizingRealm类的方法中
     <bean class="org.apache.shiro.authc.credential.SimpleCredentialsMatcher" id="credentialsMatcher"/>
-
+    -->
     <!-- 配置 Bean 后置处理器: 会自动的调用和 Spring 整合后各个组件的生命周期方法. -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 </beans>

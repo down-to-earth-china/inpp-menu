@@ -42,7 +42,8 @@ public class ShiroDbRelam extends AuthorizingRealm {
 /*
 * shiro的权限授权是通过继承AuthorizingRealm抽象类，重载doGetAuthorizationInfo();当访问到页面的时候，
 * 链接配置了相应的权限或者shiro标签才会执行此方法否则不会执行，所以如果只是简单的身份认证没有权限的控制的话，
-* 那么这个方法可以不进行实现，直接返回null即可。在这个方法中主要是使用类：SimpleAuthorizationInfo进行角色的添加和权限的添加。
+* 那么这个方法可以不进行实现，直接返回null即可。在这个方法中主要是使用类：SimpleAuthorizationInfo
+* 进行角色的添加和权限的添加。
 * */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
@@ -87,7 +88,7 @@ public class ShiroDbRelam extends AuthorizingRealm {
         // password, getName());
         // 第一个参数，可以在授权方法中获取到
         logger.info("-------doGetAuthenticationInfo-------");
-
-         return new SimpleAuthenticationInfo(token.getUsername(),user.getPassword(),this.getName());
+        //返回给SimpleCredentialsMatcher类中
+         return new SimpleAuthenticationInfo(user.getName(),user.getPassword(),this.getName());
     }
 }

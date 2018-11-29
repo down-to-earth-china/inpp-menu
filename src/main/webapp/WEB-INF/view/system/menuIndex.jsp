@@ -33,6 +33,7 @@
                     <form role="form" class="form-inline" action="${ctx}/user/export" id="queryForm">
                         <shiro:hasRole name="001">
                             <button type="button" class="btn btn-primary" id="add-btn">新增菜单</button>
+                            <button type="button" class="btn btn-primary" id="del-btn">删除菜单</button>
                         </shiro:hasRole>
                     </form>
                 </div>
@@ -57,66 +58,63 @@
     </div>
 </div>
 </div>
-
-
+</div>
 <%--弹窗--%>
 <div id="menu-modal-form" class="modal fade" aria-hidden="true">
     <div class="modal-dialog" style="width: 600px;">
         <%--<div class="modal-body">--%>
-            <div class="col-sm-12">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>添加菜单</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <form class="form-horizontal m-t" id="logForm" action="${ctx}/system/addMenu" accept-charset="UTF-8">
-                            <div class="form-group">
-                                <label for="menuname" class="col-sm-2 control-label">菜单名称:</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="menuname" name="name"
-                                           placeholder="请输入名字">
-                                </div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>添加菜单</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="logForm" action="${ctx}/system/addMenu" accept-charset="UTF-8">
+                        <div class="form-group">
+                            <label for="menuname" class="col-sm-2 control-label">菜单名称:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="menuname" name="name"
+                                       placeholder="请输入名字">
                             </div>
-                            <div class="form-group">
-                                <label for="url" class="col-sm-2 control-label">菜单路径:</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="url" name="url"
-                                           placeholder="请输入名字">
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="url" class="col-sm-2 control-label">菜单路径:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="url" name="url"
+                                       placeholder="请输入名字">
                             </div>
-                            <div class="form-group">
-                                <label for="parentId" class="col-sm-2 control-label">父菜单:</label>
-                                <div class="col-sm-2">
-                                    <select type="text" class="form-control" name="parentId" id="parentId"
-                                            data-bind-dict="BUS_STATUS_CD" style="width: 400px">
-                                        <option value="0">请选择</option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="parentId" class="col-sm-2 control-label">父菜单:</label>
+                            <div class="col-sm-2">
+                                <select type="text" class="form-control" name="parentId" id="parentId"
+                                        data-bind-dict="BUS_STATUS_CD" style="width: 400px">
+                                    <option value="0">请选择</option>
+                                </select>
                             </div>
-                            <div class="form-group">
-                                <label for="status" class="col-sm-2 control-label">菜单状态:</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="status" name="status"
-                                           placeholder="请输入名字">
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="status" class="col-sm-2 control-label">菜单状态:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="status" name="status"
+                                       placeholder="请输入名字">
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default"
-                                        data-dismiss="modal">关闭
-                                </button>
-                                <button type="submit" class="btn btn-primary">
-                                    提交更改
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">关闭
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                提交更改
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
     </div>
 </div>
 <%--end弹窗--%>
-</div>
-
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="${ctx}/resources/js/jquery-2.1.1.min.js"></script>
 <script src="${ctx}/resources/js/plugins/ajaxfileupload/jquery.ajaxfileupload.js"></script>
@@ -195,8 +193,9 @@
             // sortorder: 'desc',
             viewrecords: false,
             rownumbers: true,
+            multiselect: true,
             onSelectRow: function (rowid) {
-                alert(rowid);
+                //alert(rowid);
                 //openUserMenu();
             },
             loadComplete: function (data) {
@@ -207,6 +206,59 @@
         jQuery("#loanRecords_table_1").jqGrid('setFrozenColumns');
         // Add selection
     });
+
+    //刷新
+    function getMenus(){
+        $("#loanRecords_table_1").trigger("reloadGrid");
+    }
+    //删除
+    $("#del-btn").click(function () {
+
+        var rowIds = jQuery("#loanRecords_table_1").jqGrid('getGridParam', 'selarrrow');
+        var array = (rowIds+"").split(",");
+        var menuIds = "";
+        for (var i = 0; i < array.length && array[i]; i++) {
+            var rowData = $("#loanRecords_table_1").jqGrid("getRowData", array[i]);
+            menuIds += rowData.id + ",";
+        }
+       //jQuery('#gridTable').jqGrid('getCell',rowIds[i],'id');
+        $.ajax({
+            url: "${ctx}/system/delMenu",
+            data: {"menuId": menuIds},
+            type: "GET",
+            async:false,
+            dataType: "json",//注意如果controller返回是简单的字符串 就会抛出异常 因为简单的字符串如"success"等 不是标准的json格式
+            success: function (data) {
+                if(data && data.flag == "SUCCESS"){
+
+                    swal({
+                                title: "删除成功",
+                                text: "",
+                                type: "success"
+                            }
+                    );
+                    getMenus();
+                }else{
+                    swal({
+                                title: data.object,
+                                text: "",
+                                type: "error"
+                            }
+                    );
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown);
+                var i = 0;
+                swal({
+                    title: "删除用户异常"+ errorThrown,
+                    text: "",
+                    type: "error"
+                });
+            }
+        })
+    });
+
     $("#expor-tbutton").click(function () {
         $("#queryForm").submit();
     });

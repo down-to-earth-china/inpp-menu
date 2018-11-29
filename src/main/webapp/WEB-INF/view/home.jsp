@@ -23,6 +23,7 @@
     System.out.println("pageContext="+pageContext.getRequest().getAttribute("menus"));
 
     System.out.println("shiro="+SecurityUtils.getSubject().getSession().getAttribute("menus1"));
+    System.out.println("sessType="+SecurityUtils.getSubject().getSession().getAttribute("sessType"));
 %>
 <body class="fixed-sidebar full-height-layout gray-bg">
 <div id="wrapper">

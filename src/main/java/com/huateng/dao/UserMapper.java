@@ -32,4 +32,6 @@ public interface UserMapper {
     int insertUms(List<Map<String,Object>> list);
 
     void deleteUserMenu(int userId);
+
+    void deleteUser(int userId);
 }
