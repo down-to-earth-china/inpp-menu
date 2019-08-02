@@ -42,8 +42,8 @@
     </bean>
 
     <bean id="redisLock" class="redis.clients.jedis.Jedis">
-        <constructor-arg name="host" value="127.0.0.1"/>
-        <constructor-arg name="port" value="6379"/>
+        <constructor-arg name="host" value="${hostName}"/>
+        <constructor-arg name="port" value="${port}"/>
     </bean>
 
 </beans>

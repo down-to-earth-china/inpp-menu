@@ -9,11 +9,11 @@ package com.huateng.common;/**
  **/
 public class RedisConstant {
 
-    public static final String UID_PRE = "uid_pre";
-    public static final String SHIRO_REDIS_SESSION_PRE = "shiro_redis_session_pre";
-    public static final String SHIRO_SESSION_PRE = "shiro_session_pre";
-    public static final String ROLE_PRE = "role_pre";
-    public static final String PERMISSION_PRE = "permission_pre";
+    public static final String UID_PRE = "uid_pre_";
+    public static final String SHIRO_REDIS_SESSION_PRE = "shiro_redis_session_pre_";
+    public static final String SHIRO_SESSION_PRE = "shiro_session_pre_";
+    public static final String ROLE_PRE = "role_pre_";
+    public static final String PERMISSION_PRE = "permission_pre_";
 
 
 }

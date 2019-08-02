@@ -122,7 +122,7 @@ public class PropKit {
         return getProp().getLong(key);
     }
 
-    public static Long getLong(String key, Long defaultValue) {
+    public static Long getLong(String key, Long defaultValue)  {
         return getProp().getLong(key, defaultValue);
     }
 

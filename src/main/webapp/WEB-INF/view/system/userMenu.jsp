@@ -315,9 +315,8 @@
     //删除
     $("#del-btn").click(function () {
         var userId = ${user.id};
-       var a = $(".active.J_menuTab").attr("data-id");
-alert(a);
-        /*$.ajax({
+        //var a = $(".active.J_menuTab").attr("data-id");
+        $.ajax({
             url: "${ctx}/user/delUser",
             data: {userId: userId},
             type: "GET",
@@ -349,7 +348,7 @@ alert(a);
                     type: "error"
                 });
             }
-        })*/
+        })
     });
 
     function upload() {

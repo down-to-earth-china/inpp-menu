@@ -22,6 +22,12 @@ import java.util.Set;
 /**
  * redis操作
  * @author shuaion 2018/11/29
+ *
+ * 若将session存储在redis中
+ * 就需要一个转换类,此类需要实现shiro session管理接口或者抽象类【AbstractSessionDAO】
+ * 在此转换类中 就需要实现该接口或者抽象类方法,【因为需要遵循shiro框架中对session的管理方式,使用redis只不过是换个地方存储】
+ *
+ *
  **/
 @Resource
 public class RedisSessionDao extends AbstractSessionDAO{
